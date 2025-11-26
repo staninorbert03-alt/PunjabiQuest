@@ -1,0 +1,15 @@
+punjabiquest/
+├─ app/
+│  ├─ page.tsx                  # Main Page mit Tabs Dolmetscher + Lernen
+│  └─ daily-quests.tsx          # Daily Quests Page
+├─ lib/
+│  └─ supabase-client.ts        # Supabase Client & Auth Hooks
+├─ supabase/
+│  └─ functions/
+│     └─ encrypt-quest/
+│        └─ index.ts            # Edge Function Skeleton
+├─ package.json
+├─ tsconfig.json
+├─ tailwind.config.js
+├─ next.config.js
+└─ postcss.config.js
