@@ -1,119 +1,74 @@
-import { NextResponse } from "next/server";
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import type { NextRequest } from "next/server";
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 
-// This is the primary middleware function that handles both authentication and authorization.
-export async function middleware(req: NextRequest) {
-  // 1. Create a response object to refresh the session cookie
-  const res = NextResponse.next();
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-  // 2. Create a Supabase client configured to use the middleware's request and response
-  const supabase = createMiddlewareClient({ req, res });
-
-  // 3. Refresh the session (if expired) and get the current session
-  // This step is crucial for keeping the session alive and accessible on the client side.
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  // --- Authorization Logic ---
-
-  // Define the routes that require admin privileges
-  const adminRoutes = ["/admin/go-live"];
-
-  // Check if the current path is an admin route
-  if (adminRoutes.some((p) => req.nextUrl.pathname.startsWith(p))) {
-    // If no session, redirect to login
-    if (!session) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    // Check the user's role from the database
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
-
-    // If there's an error or the role is not 'admin', redirect to a denied page or home
-    if (error || data?.role !== "admin") {
-      return NextResponse.redirect(new URL("/denied", req.url));
-    }
-  }
-
-  // Return the response with the refreshed session cookies
-  return res;
-}
-
-// Configuration to specify which paths the middleware should run on.
-export const config = {
-  matcher: [
-    // Match all paths except for _next/static, _next/image, favicon.ico, and public files
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)",
-    // Explicitly include the admin path for clarity, although the above regex should cover it
-    "/admin/:path*",
-  ],
-};
-import { NextResponse } from "next/server";
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-
-export async function middleware(req: any) {
-  const res = NextResponse.next();
-  const supabase = createMiddlewareClient({ req, res });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const adminRoutes = ["/admin/go-live"];
-
-  if (adminRoutes.some((p) => req.nextUrl.pathname.startsWith(p))) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    const { data } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
-
-    if (data.role !== "admin") {
-      return NextResponse.redirect(new URL("/denied", req.url));
-    }
-  }
-
-  return res;
-}
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-export async function middleware(req) {
-  const supabase = createClient(
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { global: { headers: { Authorization: req.headers.get("Authorization")! } } }
-  );
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+        },
+      },
+    }
+  )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Das Aktualisieren der Benutzersitzung ist wichtig für die serverseitige Authentifizierung.
+  // Es stellt sicher, dass das Auth-Cookie aktuell ist.
+  await supabase.auth.getSession()
 
-  if (!user) return NextResponse.redirect("/login");
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profile?.role !== "admin") {
-    return NextResponse.redirect("/");
-  }
-
-  return NextResponse.next();
+  return response
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
-};
+  matcher: [
+    /*
+     * Alle Anfragepfade abgleichen, außer denen, die beginnen mit:
+     * - _next/static (statische Dateien)
+     * - _next/image (Bildoptimierungsdateien)
+     * - favicon.ico (Favicon-Datei)
+     * Du kannst dieses Muster gerne anpassen, um weitere Pfade einzuschließen.
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
