@@ -23,3 +23,9 @@
     "autoprefixer": "^10.4.0"
   }
 }
+// dependencies (Ausschnitt)
+"dependencies": {
+  // ...bestehende deps
+  "chart.js": "^4.4.0",
+  "react-chartjs-2": "^5.2.0"
+}
