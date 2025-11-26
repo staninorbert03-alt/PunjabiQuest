@@ -1,4 +1,25 @@
-import OpenPGP from 'openpgp';
+import { NextResponse } from "next/server";
+import { createServerSupabase } from "@/lib/supabase/server";
+
+export const runtime = "edge";
+
+export async function GET() {
+  const supabase = createServerSupabase();
+  try {
+    const { data } = await supabase.from('events').select('user_id, created_at');
+    // compute unique users per day
+    const map: Record<string, Set<string>> = {};
+    (data||[]).forEach((r:any) => {
+      const day = r.created_at.slice(0,10);
+      map[day] = map[day] ?? new Set();
+      map[day].add(r.user_id);
+    });
+    const arr = Object.keys(map).sort().map(d => ({ day: d, dau: map[d].size }));
+    return NextResponse.json({ dau: arr });
+  } catch (e:any) {
+    return NextResponse.json({ error: e.message ?? String(e) }, { status: 500 });
+  }
+}import OpenPGP from 'openpgp';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
