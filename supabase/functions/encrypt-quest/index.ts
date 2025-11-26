@@ -78,3 +78,7 @@ export async function GET() {
     return NextResponse.json({ error: e.message ?? String(e) }, { status: 500 });
   }
 }
+// Beispiel: beim Quest Complete (Edge function)
+await supabase.from('events').insert([
+  { user_id: user.id, event_type: 'quest_completed', meta: { quest_id, xp_gain }, created_at: new Date().toISOString() }
+]);
