@@ -54,21 +54,13 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Das Aktualisieren der Benutzersitzung ist wichtig für die serverseitige Authentifizierung.
-  // Es stellt sicher, dass das Auth-Cookie aktuell ist.
-  await supabase.auth.getSession()
+  await supabase.auth.getUser()
 
   return response
 }
 
 export const config = {
   matcher: [
-    /*
-     * Alle Anfragepfade abgleichen, außer denen, die beginnen mit:
-     * - _next/static (statische Dateien)
-     * - _next/image (Bildoptimierungsdateien)
-     * - favicon.ico (Favicon-Datei)
-     * Du kannst dieses Muster gerne anpassen, um weitere Pfade einzuschließen.
-     */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
+}
