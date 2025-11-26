@@ -82,3 +82,4 @@ export async function GET() {
 await supabase.from('events').insert([
   { user_id: user.id, event_type: 'quest_completed', meta: { quest_id, xp_gain }, created_at: new Date().toISOString() }
 ]);
+ALTER TABLE profiles ADD COLUMN role TEXT DEFAULT 'user';
