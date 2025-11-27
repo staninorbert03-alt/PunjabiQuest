@@ -10,15 +10,11 @@ module.exports = {
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-# Supabase-Pakete für Next.js installieren
-npm install @supabase/supabase-js @supabase/ssr
+    # Node.js-Typen als Entwicklungsabhängigkeit installieren
+npm install --save-dev @types/node
+```
+# Tailwind CSS und seine Peer-Abhängigkeiten installieren (zur Sicherheit)
+npm install -D tailwindcss postcss autoprefixer
 
-# Node.js-Typen als Entwicklungsabhängigkeit installieren
+# Konfigurationsdateien erstellen
+npx tailwindcss init -p
