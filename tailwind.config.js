@@ -18,3 +18,7 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+# Supabase-Pakete für Next.js installieren
+npm install @supabase/supabase-js @supabase/ssr
+
+# Node.js-Typen als Entwicklungsabhängigkeit installieren
