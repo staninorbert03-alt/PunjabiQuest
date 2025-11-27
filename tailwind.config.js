@@ -50,3 +50,19 @@ module.exports = {
   plugins: [],
 };
 ```
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  // Passen Sie diese Pfade an die Struktur Ihres Projekts an.
+  // Dieses Beispiel deckt Projekte mit und ohne 'src'-Ordner ab.
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}" // Falls Sie einen src-Ordner verwenden
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
