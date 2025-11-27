@@ -1,3 +1,6 @@
+# Erstellt die Konfigurationsdateien im Projektstamm
+npx tailwindcss init -p
+```
 # 1. Supabase-Module für serverseitige Operationen installieren
 npm install @supabase/supabase-js @supabase/ssr
 
