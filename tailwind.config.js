@@ -1,4 +1,7 @@
-/** @type {import('tailwindcss').Config} */
+| `Cannot find name 'process'`                | Dem TypeScript-Compiler fehlen die Typdefinitionen für die Node.js-Laufzeitumgebung. Dadurch wird das globale `process`-Objekt (für Umgebungsvariablen) nicht erkannt. | Installation von `@types/node` als Entwicklungsabhängigkeit (`devDependency`).                                                                  |
+| `middleware.ts(75,1): error TS1005: '}' expected.` | Ein Syntaxfehler in der `middleware.ts`-Datei. Dies kann durch fehlerhaftes Kopieren oder unvollständigen Code verursacht werden.                                 | Überprüfung und Korrektur der `middleware.ts`-Datei.                                                                                            |
+| `tailwind.config.js fehlt`                  | Die zentrale Konfigurationsdatei für Tailwind CSS wurde nicht erstellt oder dem Projekt hinzugefügt. Ohne sie kann Tailwind kein CSS generieren.                 | Initialisierung von Tailwind CSS zur Erstellung der `tailwind.config.js` und `postcss.config.js` und anschließende Konfiguration.                 |
+| `Unsupported modules in Edge Function`      | Die Vercel-Projekteinstellung **Framework Preset** ist wahrscheinlich auf "Other" anstatt "Next.js" gesetzt. Dadurch wird die Middleware in einer falschen Umgebung ausgeführt. | Überprüfung und Korrektur des **Framework Presets** im Vercel-Dashboard auf "Next.js".                                                          |/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
