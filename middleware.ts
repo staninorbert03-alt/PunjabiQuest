@@ -66,3 +66,11 @@ export const config = {
 }
 Fix: Replace middleware with @supabase/ssr
 
+# 1. Supabase-Module für serverseitige Operationen installieren
+npm install @supabase/supabase-js @supabase/ssr
+
+# 2. Node.js-Typen für TypeScript als Entwicklungsabhängigkeit hinzufügen
+npm install --save-dev @types/node
+
+# 3. Tailwind CSS und seine Abhängigkeiten als Entwicklungsabhängigkeiten hinzufügen
+npm install -D tailwindcss postcss autoprefixer
