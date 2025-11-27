@@ -1,0 +1,11 @@
+vercel project ls
+ 
+# Output as JSON
+vercel project ls --json
+vercel project ls --update-required
+ vercel project ls --update-required
+ 
+# Output as JSON
+vercel project ls --update-required --json
+vercel project add
+vercel project rm
