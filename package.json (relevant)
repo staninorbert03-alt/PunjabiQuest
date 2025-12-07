@@ -29,6 +29,7 @@
   "chart.js": "^4.4.0",
   "react-chartjs-2": "^5.2.0"
 }
+-
 return NextResponse.json({ dau: dauByDay, xp: xpRes?.data ?? [], topUsers: top ?? [], cohorts: cohorts ?? [], streaks: streaks ?? [] });
   } catch (e:any) {
     return NextResponse.json({ error: e.message ?? String(e) }, { status: 500 });
