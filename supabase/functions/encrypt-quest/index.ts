@@ -55,15 +55,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 
 export const runtime = "edge";
 
-export async function GET() {
-  const supabase = createServerSupabase();
-  try {
-    const { data } = await supabase.from('analytics_weekly_cohort').select('*').order('cohort_week', {ascending:false}).limit(200);
-    return NextResponse.json({ cohorts: data });
-  } catch (e:any) {
-    return NextResponse.json({ error: e.message ?? String(e) }, { status: 500 });
-  }
-}
+
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 
