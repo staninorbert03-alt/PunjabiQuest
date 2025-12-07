@@ -71,7 +71,6 @@ export async function POST(req: NextRequest) {
     } else {
       assistantText = JSON.stringify(openai);
     }
-
     const cleaned = assistantText.trim().replace(/^```(?:json)?\\n?/, "").replace(/\\n?```$/, "");
     let parsed;
     try { parsed = JSON.parse(cleaned); } catch (e) {
